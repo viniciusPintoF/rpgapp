@@ -8,15 +8,48 @@ var battleStarted = false
 var enablePrioFighter = false
 var enableChangeValues = false
 
-var turn = 0;
+var turn = -1;
 
-/*
-0 -> prio
-1 -> life
-2 -> damage
-3 -> percep
-4 -> CA
-*/
+function getID(fighterNode){
+	return parseInt(fighterNode.id.split('-')[1])
+}
+
+function getPriority(fighterId, type="value"){
+	if(type == "value")
+		return document.getElementById('prioFighter-'+fighterId).value
+	else
+		return document.getElementById('prioFighter-'+fighterId)
+}
+function getInitiative(fighterId, type="value"){
+	if(type == "value")
+		return document.getElementById('initFighter-'+fighterId).innerHTML
+	else
+		return document.getElementById('initFighter-'+fighterId)
+}
+function getDamage(fighterId, type="value"){
+	if(type == "value")
+		return document.getElementById('damageFighter-'+fighterId).value
+	else
+		return document.getElementById('damageFighter-'+fighterId)
+}
+function getPerception(fighterId, type="value"){
+	if(type == "value")
+		return document.getElementById('percFighter-'+fighterId).value
+	else
+		return document.getElementById('percFighter-'+fighterId)
+}
+function getLife(fighterId, type="value"){
+	if(type == "value")
+		return document.getElementById('hpFighter-'+fighterId).value
+	else
+		return document.getElementById('hpFighter-'+fighterId)
+}
+function getCA(fighterId, type="value"){
+	if(type == "value")
+		return document.getElementById('caFighter-'+fighterId).value
+	else
+		return document.getElementById('caFighter-'+fighterId)
+}
 
 
 function toMinutesString(timeInSeconds){
@@ -44,22 +77,14 @@ function toMinutesString(timeInSeconds){
 
 compareInitAndPrio = function(a,b){ 
 
-	// console.log(a.id)
-	// console.log(b.id)
-
 	aId = parseInt(a.id.split('-')[1])
 	bId = parseInt(b.id.split('-')[1])
 
-	// console.log(aId)
-	// console.log(bId)
+	aInit = getInitiative(aId)
+	aPrio = getPriority(aId)
 
-	// aInit = fightersInBattle[aId].init
-	aInit = a.innerText.split("\t")[1]
-	aPrio = a[0].value
-
-
-	bInit = b.innerText.split("\t")[1]
-	bPrio = b[0].value
+	bInit = getInitiative(bId)
+	bPrio = getPriority(bId)
 
 	if(aInit != bInit){
 		return bInit - aInit
@@ -96,8 +121,7 @@ function initBattle(){
 	fightersArray = Array.prototype.slice.call(fightersArray, 0);
 
 	// Sort array
-	fightersArray.sort(compareInitAndPrio)
-	
+	fightersArray.sort(compareInitAndPrio)	
 
 	// Sort forms
 	fightersInfo.innerHTML = "";
@@ -113,6 +137,7 @@ function initBattle(){
 	document.getElementById('endButton').disabled = false;
 
 	//Start turn of first
+	turn++;
 	fighters = document.getElementById('fightersInfo').children
 	fighters[turn].style = "background-color: lightgreen;"
 
@@ -136,7 +161,7 @@ function nextTurn(){
 		currentRound++
 		timePassed += 6
 
-		// First turn
+		// Update to first turn of the round
 		turn = 0;
 
 		// Update time counting
@@ -162,7 +187,7 @@ function nextTurn(){
 			// udate time 
 			let info = effects[i].children[1].innerHTML.split(" ")
 
-			console.log(info)
+			// console.log(info)
 			
 			let minPart = 0, secPart = 0;		
 
@@ -188,15 +213,19 @@ function nextTurn(){
 
 	// Process damage
 	for (var i = 0; i < fighters.length; i++) {
-		fighters[i][1].value = parseInt(fighters[i][1].value) + parseInt(fighters[i][2].value)
-		fighters[i][2].value = 0
+
+		let fighterId = getID(fighters[i])
+		let lifeNode = getLife(fighterId, "node")
+		let damageNode = getDamage(fighterId, "node")
+
+		lifeNode.value = parseInt(lifeNode.value) + parseInt(damageNode.value)
+		damageNode.value = 0
 		
-		if(fighters[i][1].value <= 0){
-			fighters[i][1].value = 0
-			
+		if(lifeNode.value <= 0){
+			lifeNode.value = 0			
 		}
 
-		fighters[i][1].style = fighters[i][1].value > 0 ? "" : "background-color: #ff9696;"	
+		lifeNode.style.backgroundColor = lifeNode.value > 0 ? "" : "#ff9696"	
 	}
 }
 
@@ -297,57 +326,59 @@ function createFighter(name, initiative, initialHP, passPerception, ca, qtd="", 
 
 	for (var i = 0; i < qtd; i++) {
 		// Add form
-		infoParticulares = document.createElement("form")
+		infoParticulares = document.createElement("div")
 		infoParticulares.setAttribute('class', 'infoparticular')
 		infoParticulares.setAttribute('id', 'fighter-'+countFighter)
 		
 		if(enableChangeValues == false){
-			infoParticulares.innerHTML = 
-
-			"<div class='tableTitle'>["+countFighter+"] <b>"+name+" </b></div>\
+			infoParticulares.innerHTML =
+			"<div class='tableTitle'>["+countFighter+"] <b>"+name+" </b>\
+			<input type='image' src='./remove-button.png' style='width:18px; float:right; margin-right: 6px;' onClick='removeFighter("+countFighter+")'>\
+			</div>\
 			<table>\
 				<tr>\
 					<td>Iniciativa/Prio:</td>\
-					<td style='text-align: center; border-style: solid; border-width: 2px; background-color: white;'>"+initiative+"</td>\
-					<td><input type='number' name='prio' value='"+priority+"' class='fixedValue' disabled></td>\
+					<td id='initFighter-"+countFighter+"' style='text-align: center; border-style: solid; border-width: 2px; background-color: white;'>"+initiative+"</td>\
+					<td><input type='number' id='prioFighter-"+countFighter+"' value='"+priority+"' class='fixedValue' disabled></td>\
 				</tr>\
 				<tr>\
 					<td>Vida/Dano:</td>\
-					<td><input type='number' name='hp' value='"+initialHP+"' class='fixedValue' disabled></td>\
-					<td><input type='number' name='damage' value='0' class='smallInput'></td>\
+					<td><input type='number' id='hpFighter-"+countFighter+"' value='"+initialHP+"' class='fixedValue' disabled></td>\
+					<td><input type='number' id='damageFighter-"+countFighter+"' value='0' class='smallInput'></td>\
 				</tr>\
 					<td>Perc. Passiva:</td>\
-					<td><input type='number' name='perc' value='"+passPerception+"'' class='fixedValue' disabled></td>\
+					<td><input type='number' id='percFighter-"+countFighter+"' value='"+passPerception+"'' class='fixedValue' disabled></td>\
 				<tr>\
 				</tr>\
 					<td>CA:</td>\
-					<td><input type='number' name='ca' value='"+ca+"'' class='fixedValue' disabled></td>\
+					<td><input type='number' id='caFighter-"+countFighter+"' value='"+ca+"'' class='fixedValue' disabled></td>\
 				<tr>\
 			</table>"
 		}
 		else{
 			infoParticulares.innerHTML = 
-
-			"<div class='tableTitle'>["+countFighter+"] <b>"+name+" </b></div>\
+			"<div class='tableTitle'>["+countFighter+"] <b>"+name+" </b>\
+			<input type='image' src='./remove-button.png' style='width:18px; float:right; margin-right: 6px;' onClick='removeFighter("+countFighter+")'>\
+			</div>\
 			<table>\
 				<tr>\
 					<td>Iniciativa/Prio:</td>\
-					<td style='text-align: center; border-style: solid; border-width: 2px; background-color: white;'>"+initiative+"</td>\
-					<td><input type='number' name='prio' value='"+priority+"' class='fixedValue' ></td>\
+					<td id='initFighter-"+countFighter+"' style='text-align: center; border-style: solid; border-width: 2px; background-color: white;'>"+initiative+"</td>\
+					<td><input type='number' id='prioFighter-"+countFighter+"' value='"+priority+"' class='fixedValue'></td>\
 				</tr>\
 				<tr>\
 					<td>Vida/Dano:</td>\
-					<td><input type='number' name='hp' value='"+initialHP+"' class='fixedValue' ></td>\
-					<td><input type='number' name='damage' value='0' class='smallInput'></td>\
+					<td><input type='number' id='hpFighter-"+countFighter+"' value='"+initialHP+"' class='fixedValue'></td>\
+					<td><input type='number' id='damageFighter-"+countFighter+"' value='0' class='smallInput'></td>\
 				</tr>\
 					<td>Perc. Passiva:</td>\
-					<td><input type='number' name='perc' value='"+passPerception+"'' class='fixedValue' ></td>\
+					<td><input type='number' id='percFighter-"+countFighter+"' value='"+passPerception+"'' class='fixedValue'></td>\
 				<tr>\
 				</tr>\
 					<td>CA:</td>\
-					<td><input type='number' name='ca' value='"+ca+"'' class='fixedValue' ></td>\
+					<td><input type='number' id='caFighter-"+countFighter+"' value='"+ca+"'' class='fixedValue'></td>\
 				<tr>\
-			</table>"
+			</table>"			
 		}
 		
 		document.getElementById("fightersInfo").appendChild(infoParticulares)		
@@ -355,6 +386,47 @@ function createFighter(name, initiative, initialHP, passPerception, ca, qtd="", 
 		countFighter++
 		totalFighters++		
 	}
+}
+
+function removeFighter(idNumber){
+	let removed = document.getElementById('fighter-'+idNumber)
+	console.log(removed.children)
+	let parent = document.getElementById("fightersInfo")
+
+	
+	if(battleStarted){
+		if(confirm("Deseja realmente remover da batalha o combatente "+removed.children[0].children[0].innerHTML+"["+idNumber+"]?")){
+			if(removed.style.backgroundColor == 'lightgreen'){		
+				if(turn+1 < totalFighters){
+					parent.children[turn+1].style.backgroundColor = 'lightgreen'		
+				}
+				else if(totalFighters > 0){
+					turn = 0;
+					parent.children[0].style.backgroundColor = 'lightgreen'
+				}
+			}
+
+			else{
+				for (i = 0; i < parent.children.length; i++) {
+					if(parent.children[i].id == 'fighter-'+idNumber){
+						break;
+					}	
+				}
+				if(turn > i){
+					turn--;
+				}
+			}
+			parent.removeChild(removed)
+			totalFighters--;
+		}		
+	}
+	else{
+		parent.removeChild(removed)
+		totalFighters--;
+	}
+
+	
+	
 }
 
 function removeEffect(idName){

@@ -38,7 +38,7 @@ table{
 }
 
 #fightersInfo{
-	overflow-x: auto;
+	overflow-x: scroll;
 	display: flex;
 }
 
