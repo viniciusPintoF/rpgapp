@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>New Battle</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="stylesheet.css">
+	<script typte="text/javascript" src="app.js"></script>
+	<script typte="text/javascript" src="defaultFighters.js"></script>
+</head>
+
+<body>
+	<div class="divPrincipal">
+		<div id='inputHeader'>
+			<table id='inputFighter' height='100%'>
+				<tr>
+					<th colspan='4'>Adicionar Combatente</th>
+				</tr>
+				<tr>
+					<td>Código:</td>
+					<td><input type='text' name='codigo' id='codeInputFighter'></td>
+					<td><input type="image" src="./Search-button.png" style="width:15px;" onclick='findFighter()'></td>
+				</tr>
+				<tr>
+					<td>Nome:</td>
+					<td><input type='text' name='nome' id='nameInputFighter'></td>				
+				</tr>
+				<tr>
+					<td>Percepção:</td>
+					<td><input type='number' name='ppassiva' id='percInputFighter' class='smallInput'></td>
+				</tr>
+				<tr>
+					<td>CA:</td>
+					<td><input type='number' name='ca' id='caInputFighter' class='smallInput'></td>
+				</tr>
+				<tr>
+					<td>Vida inicial:</td>
+					<td><input type='number' name='HPinicial' id='hpInputFighter' class='smallInput' min="0"></td>
+				</tr>
+				<tr>
+					<td>Iniciativa:</td>
+					<td><input type='number' name='iniciativa' id='initInputFighter' class='smallInput'></td>
+				</tr>
+				<tr>
+					<td>Prioridade:</td>
+					<td><input type='number' name='´prioridade' id='prioInputFighter' class='smallInput' min="0" disabled></td>
+					<td><input type="checkbox" name="enablePrioFighter" onchange='setEnablePrioFighter()'></td>
+				</tr>
+				<tr>				
+					<td><br>Quantidade:</td>
+					<td><br><input type='number' name='qtd' id='qtdInputFighter' class='smallInput'></td>
+				</tr>
+				<tr>
+					<td><br><input type='button' id='addFighterButton' value='Adicionar' onclick='addGroup()' style='margin-left: 0;'></td>
+				</tr>
+			</table>
+
+			<table id='inputEffect' height='100%'>
+				<tr>
+					<th colspan="3">Adicionar Efeito</th>
+				</tr>
+				<tr>
+					<td>Código:</td>
+					<td>
+						<input type='text' name='codigo' id='codeInputEffect'>						
+					</td>
+					<td>
+						<input type="image" src="./Search-button.png" style="width:15px;" onclick='findEffect()'>
+					</td>
+				</tr>
+				<tr>
+					<td>Nome:</td>
+					<td><input type='text' name='nome' id='nameInputEffect'></td>				
+				</tr>
+				<tr>
+					<td>Tempo:</td>
+					<td>
+						<input type='number' name='nome' id='timeInputEffect' class='smallInput'>
+						<input type="radio" id='minTimeUnit' name="timeUnit" value="min"> Min
+						<input type="radio" id='secTimeUnit' name="timeUnit" value="seg"> Seg
+					</td>				
+				</tr>
+				<tr>
+					<td>
+						<br><input type='button' id='addEffectButton' value='Adicionar' onclick='addEffect()' style='margin-left: 0;'>
+					</td>
+				</tr>
+			</table>
+			<br>
+
+			<div id='effects'>
+				<table id='effectsTable'>
+					<tr>
+						<th colspan="4" style="padding-bottom:15px;">Efeitos Vigentes</th>
+					</tr>
+					<tr>
+						<th>Nome</th>
+						<th>Tempo</th>
+						<th>Rodadas</th>
+					</tr>
+				</table>
+			</div>			
+		</div>
+
+		<div id='roundsInfo' style="display: flex;">
+			<input type='button' style='margin-right: 10px' id='startButton' value='Iniciar' onclick='initBattle()'> 
+			<input type='button' style='margin-right: 10px' id='nextButton' value='Próximo' onclick='nextTurn()' disabled>
+			<input type='button' style='margin-right: 10px' id='endButton' value='Finalizar' onclick='endBattle()' disabled> 
+			<div style='margin-right: 20px; width: 90px;'>Rodada: 0</div> <div style="width: 200px;">Tempo passado: 0 s</div>
+		</div>
+		
+		
+
+		<div id='fightersInfoParent'>
+			<h3>Combatentes</h3>
+			<input type="checkbox" name="enableChangeValues" onchange='setEnableChangeValues()'> Permitir modificação <br>
+			<div id='fightersInfo'>
+				
+			</div>
+		</div>
+	</div>
+	<script>createFighter("Hujan", 1, 3, 4, 18)</script>
+	<script>createFighter("Adhanadel", 13, 3, 4, 15)</script>
+	<script>createFighter("Algior", 3, 3, 4, 21)</script>
+	<script>createFighter("Kobold", 3, 3, 4, 12,2)</script>
+	<script>createEffect("Fúria", 60)</script>
+	<script>createEffect("Benção", 600)</script>
+
+</body>
+
+</html>

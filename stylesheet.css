@@ -1,0 +1,95 @@
+body{
+	font-family: sans-serif;
+	display: flex;
+}
+
+table{
+	margin: 5px
+}
+
+.divPrincipal{
+	width: 100%;
+}
+
+.infoparticular{
+	border-style: solid;
+	margin: 5px 0px;
+}
+
+.infoparticular h4{
+	margin: 0;
+}
+
+.tableTitle{
+	color: white;
+	background-color: #505050;
+	text-align: left;
+	height: 25px;
+	padding-left: 5px;
+	padding-top: 5px;
+}
+
+#fightersInfoParent{
+	margin-top: 15px;
+}
+
+#fightersInfoParent h3{
+	margin: 0;
+}
+
+#fightersInfo{
+	overflow-x: auto;
+	display: flex;
+}
+
+#inputHeader{
+	display: flex;
+	overflow-x: auto;
+	height: 328px;
+	margin-bottom: 20px;
+}
+
+#inputHeader table{
+	border-style: solid;
+	padding: 10px 10px;
+	margin: 0px;	 
+	margin-right: 10px;
+}
+
+#inputHeader table th{
+	padding-bottom: 15px;
+}
+
+#effects{
+	border: rgb(128, 128, 128);
+	border-style: solid;
+	overflow-y: auto;
+}
+
+#effects table{
+	border-style: none;
+	margin: 0px;
+}
+
+#effects table th{
+	padding: 1px;
+}
+
+#effects td{
+	border: 1px solid rgb(128, 128, 128);
+	padding: 3px;
+}
+
+
+
+.inputList{
+	display: inline-block;
+}
+
+.smallInput{
+	width: 35px;
+}
+.fixedValue{
+	width: 35px;
+}
+
