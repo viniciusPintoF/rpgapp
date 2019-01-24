@@ -64,11 +64,13 @@ table{
 	border: rgb(128, 128, 128);
 	border-style: solid;
 	overflow-y: auto;
+	min-width: 360px;
 }
 
 #effects table{
 	border-style: none;
 	margin: 0px;
+	width: 100%;
 }
 
 #effects table th{
