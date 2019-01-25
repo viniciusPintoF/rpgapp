@@ -17,13 +17,17 @@
 					<th colspan='4'>Adicionar Combatente</th>
 				</tr>
 				<tr>
-					<td>Código:</td>
-					<td><input type='text' name='codigo' id='codeInputFighter'></td>
-					<td><input type="image" src="./Search-button.png" style="width:15px;" onclick='findFighter()'></td>
+					<td>Preset:</td>
+					<td>
+						<select id='selectFighter' onchange="findFighterSelect()" style="width: 160px;">
+							 
+						</select>
+					</td>
+					
 				</tr>
 				<tr>
 					<td>Nome:</td>
-					<td><input type='text' name='nome' id='nameInputFighter'></td>				
+					<td><input type='text' name='nome' id='nameInputFighter'>*</td>				
 				</tr>
 				<tr>
 					<td>Percepção:</td>
@@ -35,11 +39,11 @@
 				</tr>
 				<tr>
 					<td>Vida inicial:</td>
-					<td><input type='number' name='HPinicial' id='hpInputFighter' class='smallInput' min="0"></td>
+					<td><input type='number' name='HPinicial' id='hpInputFighter' class='smallInput' min="0">*</td>
 				</tr>
 				<tr>
 					<td>Iniciativa:</td>
-					<td><input type='number' name='iniciativa' id='initInputFighter' class='smallInput'></td>
+					<td><input type='number' name='iniciativa' id='initInputFighter' class='smallInput'>*</td>
 				</tr>
 				<tr>
 					<td>Prioridade:</td>
@@ -60,13 +64,12 @@
 					<th colspan="3">Adicionar Efeito</th>
 				</tr>
 				<tr>
-					<td>Código:</td>
+					<td>Preset:</td>
 					<td>
-						<input type='text' name='codigo' id='codeInputEffect'>						
-					</td>
-					<td>
-						<input type="image" src="./Search-button.png" style="width:15px;" onclick='findEffect()'>
-					</td>
+						<select id='selectEffect' onchange="findEffectSelect()" style="width: 160px;">
+							 
+						</select>
+					</td>					
 				</tr>
 				<tr>
 					<td>Nome:</td>
@@ -107,9 +110,7 @@
 			<input type='button' style='margin-right: 10px' id='nextButton' value='Próximo' onclick='nextTurn()' disabled>
 			<input type='button' style='margin-right: 10px' id='endButton' value='Finalizar' onclick='endBattle()' disabled> 
 			<div style='margin-right: 20px; width: 90px;'>Rodada: 0</div> <div style="width: 200px;">Tempo passado: 0 s</div>
-		</div>
-		
-		
+		</div>		
 
 		<div id='fightersInfoParent'>
 			<h3>Combatentes</h3>
@@ -119,6 +120,8 @@
 			</div>
 		</div>
 	</div>
+
+	<script>loadFightersAndEffects()</script>
 	<!-- <script>createFighter("Hujan", 1, 3, 4, 18)</script>
 	<script>createFighter("Adhanadel", 13, 3, 4, 15)</script>
 	<script>createFighter("Algior", 3, 3, 4, 21)</script>

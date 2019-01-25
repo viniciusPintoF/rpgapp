@@ -218,7 +218,7 @@ function nextTurn(){
 		let lifeNode = getLife(fighterId, "node")
 		let damageNode = getDamage(fighterId, "node")
 
-		lifeNode.value = parseInt(lifeNode.value) + parseInt(damageNode.value)
+		lifeNode.value = parseInt(lifeNode.value) - parseInt(damageNode.value)
 		damageNode.value = 0
 		
 		if(lifeNode.value <= 0){
@@ -440,10 +440,20 @@ function removeEffects(idNames){
 	}	
 }	
 
-function findFighter(){
-	keyCode = document.getElementById('codeInputFighter').value
-	fighter = savedFighters[keyCode]
-	if(fighter != null){
+
+function findFighterSelect(){
+	keyCode = document.getElementById('selectFighter').value
+	
+	if(keyCode == "noFighter"){
+		document.getElementById('qtdInputFighter').value = ""
+		document.getElementById('nameInputFighter').value = ""
+		document.getElementById('percInputFighter').value = ""
+		document.getElementById('hpInputFighter').value = ""
+		document.getElementById('caInputFighter').value = ""
+		document.getElementById('initInputFighter').value = ""
+	}
+	else{
+		fighter = savedFighters[keyCode]
 		document.getElementById('qtdInputFighter').value = ""
 		document.getElementById('nameInputFighter').value = fighter.name 
 		document.getElementById('percInputFighter').value = fighter.perc
@@ -451,14 +461,25 @@ function findFighter(){
 		document.getElementById('caInputFighter').value = fighter.ca
 		document.getElementById('initInputFighter').value = ""
 	}
+}
+
+function findEffectSelect(){
+	keyCode = document.getElementById('selectEffect').value
+	
+	if(keyCode == "noEffect"){
+		document.getElementById('nameInputEffect').value = ""
+		document.getElementById('timeInputEffect').value = ""
+		document.getElementById('minTimeUnit').value.checked = false
+		document.getElementById('secTimeUnit').value.checked = false
+
+	}
 	else{
-		document.getElementById('qtdInputFighter').value = ""
-		document.getElementById('nameInputFighter').value = ""
-		document.getElementById('percInputFighter').value = ""
-		document.getElementById('hpInputFighter').value = ""
-		document.getElementById('caInputFighter').value = ""
-		document.getElementById('initInputFighter').value = ""
-	}		
+		effect = savedEffects[keyCode]
+		document.getElementById('nameInputEffect').value = effect.name
+		document.getElementById('timeInputEffect').value = effect.time
+		document.getElementById('minTimeUnit').checked = (effect.unit == "min") ? true : false
+		document.getElementById('secTimeUnit').checked = (effect.unit == "sec") ? true : false
+	}
 }
 
 
@@ -468,6 +489,40 @@ function deleteForm(index, type){
 
 	if(excluido.parentNode){
 		excluido.parentNode.removeChild(excluido)
+	}
+}
+
+
+function loadFightersAndEffects(){
+	// Add fighters
+	let select = document.getElementById('selectFighter')
+
+	let option = document.createElement('option')
+	option.value = "noFighter"
+	option.innerHTML = ""
+	select.appendChild(option)
+
+	for (var key in savedFighters) {
+		option = document.createElement('option')
+		option.value = key
+		option.innerHTML = savedFighters[key].name
+		select.appendChild(option)
+	}
+
+
+	// Add effects
+	select = document.getElementById('selectEffect')
+
+	option = document.createElement('option')
+	option.value = "noEffect"
+	option.innerHTML = ""
+	select.appendChild(option)
+
+	for (var key in savedEffects) {
+		let option = document.createElement('option')
+		option.value = key
+		option.innerHTML = savedEffects[key].name
+		select.appendChild(option)
 	}
 }
 
